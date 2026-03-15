@@ -12,12 +12,27 @@ from .. import models
 from ..core.database import get_db
 
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-JWT_SECRET = os.getenv("JWT_SECRET", "dev-secret-change-me")
-JWT_ALGORITHM = "HS256"
-JWT_EXPIRES_MINUTES = 60 * 24
+
+def get_user_by_email(db: Session, email: str):
+    return db.query(models.User).filter(models.User.email == email).first()
+
+
+def create_user(db: Session, email: str, password: str, monthly_income: float):
+    hashed = hash_password(password)
+
+    user = models.User(
+        email=email,
+        password_hash=hashed,
+        monthly_income=monthly_income
+    )
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    return user
 
 
 def hash_password(password: str) -> str:
