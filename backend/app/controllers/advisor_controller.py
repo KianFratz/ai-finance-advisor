@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
-from ..core.database import get_db
+from ..database import get_db
 from ..services.auth_service import get_current_user
 from ..services.advisor_service import generate_financial_advice
 from .analytics_controller import spending_summary, category_breakdown

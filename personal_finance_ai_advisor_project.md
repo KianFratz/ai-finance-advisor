@@ -49,6 +49,7 @@ Example insight:
 
 -   React
 -   Recharts / Chart.js
+-   Shadcn / Tailwind
 
 ------------------------------------------------------------------------
 
