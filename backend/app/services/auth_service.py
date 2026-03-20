@@ -7,6 +7,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
+from ..core.security import pwd_context, JWT_EXPIRE_MINUTES, JWT_ALGORITHM, JWT_SECRET
 
 from .. import models
 from ..core.database import get_db
@@ -44,7 +45,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def create_access_token(user_id: int) -> str:
-    expire = datetime.utcnow() + timedelta(minutes=JWT_EXPIRES_MINUTES)
+    expire = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_MINUTES)
     payload = {"sub": str(user_id), "exp": expire}
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 

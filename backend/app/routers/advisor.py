@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
-from ..auth import get_current_user
-from ..database import get_db
-from ..services_advisor import generate_financial_advice
+from ..services.auth_service import get_current_user
+from ..core.database import get_db
+from ..services.advisor_service import generate_financial_advice
 from .analytics import spending_summary, category_breakdown
 
 

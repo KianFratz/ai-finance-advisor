@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 import pandas as pd
 
 from .. import models, schemas
-from ..auth import get_current_user
-from ..database import get_db
+from ..services.auth_service import get_current_user
+from ..core.database import get_db
 
 
 router = APIRouter(prefix="/transactions", tags=["transactions"])

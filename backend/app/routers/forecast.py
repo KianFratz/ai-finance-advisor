@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
-from ..auth import get_current_user
-from ..database import get_db
-from ..services_ml import forecast_monthly_spending
+from ..services.auth_service import get_current_user
+from ..core.database import get_db
+from ..services.ml_service import forecast_monthly_spending
 
 
 router = APIRouter(prefix="/forecast", tags=["forecast"])
