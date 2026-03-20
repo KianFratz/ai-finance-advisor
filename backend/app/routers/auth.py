@@ -1,18 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from ..schemas import UserCreate, UserOut, Token
-from ..models import User
+from .. import models, schemas
 from ..core.database import get_db
 from ..services.auth_service import (
-    get_current_user, 
-    get_user_by_email, 
-    create_user, 
-    verify_password, 
-    create_access_token
+    hash_password,
+    verify_password,
+    create_access_token,
+    get_current_user,
 )
-
-router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/register", response_model=UserOut)
@@ -20,13 +16,18 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
 
     existing = get_user_by_email(db, user_in.email)
 
+@router.post("/register", response_model=schemas.UserOut)
+def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
+
+    existing = auth_service.get_user_by_email(db, user_in.email)
+
     if existing:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
             detail="Email already registered"
         )
 
-    return create_user(
+    return auth_service.create_user(
         db,
         user_in.email,
         user_in.password,
