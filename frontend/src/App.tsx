@@ -4,9 +4,11 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
+import LandingPage from "@/pages/LandingPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -14,20 +16,25 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-  if (!user) return <Navigate to="/login" replace />;
+
+  if (!user) return <Navigate to="/welcome" replace />;
   return <>{children}</>;
 }
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
+
   if (user) return <Navigate to="/" replace />;
-  // Show login/register immediately; don't block on auth load so /login always shows
   return <>{children}</>;
 }
 
 function AppRoutes() {
   return (
     <Routes>
+      {/* Landing page — always public */}
+      <Route path="/welcome" element={<LandingPage />} />
+
+      {/* Protected dashboard */}
       <Route
         path="/"
         element={
@@ -36,6 +43,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/login"
         element={
@@ -52,7 +60,7 @@ function AppRoutes() {
           </PublicRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/welcome" replace />} />
     </Routes>
   );
 }

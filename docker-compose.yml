@@ -34,6 +34,8 @@ services:
       - "8000:8000"
     networks:
       - finance-net
+    volumes:
+      - ./backend:/app # ← mount local code into container
 
   frontend:
     build:
@@ -49,10 +51,15 @@ services:
       - "3000:3000"
     networks:
       - finance-net
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # keep node_modules from the container
 
 networks:
   finance-net:
 
 volumes:
   db_data:
+  
+
 

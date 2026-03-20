@@ -4,13 +4,13 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from .database import Base, engine
-from . import models  # noqa: F401
-from .routers import auth as auth_router
-from .routers import transactions as transactions_router
-from .routers import analytics as analytics_router
-from .routers import forecast as forecast_router
-from .routers import advisor as advisor_router
+from app.core.database import Base, engine
+from app import models  # noqa: F401
+from app.routers import auth as auth_router
+from app.routers import transactions as transactions_router
+from app.routers import analytics as analytics_router
+from app.routers import forecast as forecast_router
+from app.routers import advisor as advisor_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
