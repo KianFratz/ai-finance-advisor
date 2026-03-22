@@ -1,8 +1,6 @@
-from datetime import datetime, date
-
+from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, Float, Date, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-
 from ..core.database import Base
 
 class User(Base):
@@ -12,8 +10,9 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
     monthly_income = Column(Float, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
 
-    transactions = relationship("Transaction", back_populates="user", cascade="all, delete-orphan")
-    budgets = relationship("Budget", back_populates="user", cascade="all, delete-orphan")
-    insights = relationship("Insight", back_populates="user", cascade="all, delete-orphan")
