@@ -7,10 +7,6 @@ from fastapi.responses import JSONResponse
 from app.core.database import Base, engine
 from app import models  # noqa: F401
 from app.routers import auth as auth_router
-from app.routers import transactions as transactions_router
-from app.routers import analytics as analytics_router
-from app.routers import forecast as forecast_router
-from app.routers import advisor as advisor_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -52,7 +48,3 @@ def health():
     return {"status": "ok"}
 
 app.include_router(auth_router.router)
-app.include_router(transactions_router.router)
-app.include_router(analytics_router.router)
-app.include_router(forecast_router.router)
-app.include_router(advisor_router.router)

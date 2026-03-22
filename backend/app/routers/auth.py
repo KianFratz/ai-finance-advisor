@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+<<<<<<< HEAD
 from .. import models, schemas
 from ..core.database import get_db
 from ..services.auth_service import (
@@ -9,10 +10,18 @@ from ..services.auth_service import (
     create_access_token,
     get_current_user,
 )
+=======
+
+from ..schemas.auth_schema import UserCreate, UserOut, Token
+from ..controllers.auth_controller import AuthController
+from ..core.database import get_db
+
+>>>>>>> a440034 (refactor: remove unnecessary files and modify the auth)
 
 
-@router.post("/register", response_model=UserOut)
+@router.post("/register", response_model=UserOut, status_code=201)
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
+<<<<<<< HEAD
 
     existing = get_user_by_email(db, user_in.email)
 
@@ -34,18 +43,16 @@ def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
         user_in.monthly_income,
     )
 
+=======
+    return AuthController(db).register(user_in)
+   
+>>>>>>> a440034 (refactor: remove unnecessary files and modify the auth)
 
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == form_data.username).first()
-    if not user or not verify_password(form_data.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-
-    token = create_access_token(user_id=user.id)
-    return Token(access_token=token)
+    return AuthController(db).login(form_data.username, form_data.password)
 
 
 @router.get("/profile", response_model=UserOut)
-def profile(current_user: User = Depends(get_current_user)):
-    return current_user
-
+def profile(db: Session = Depends(get_db), token: str = Depends(AuthController.get_token)):
+    return AuthController(db).profile(token)

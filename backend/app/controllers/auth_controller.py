@@ -1,43 +1,29 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from .. import models, schemas
+from ..schemas.auth_schema import UserCreate, UserOut, Token
+from ..services.auth_service import AuthService
 from ..core.database import get_db
-from ..services.auth_service import hash_password, verify_password, create_access_token, get_current_user
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+class AuthController:
+    def __init__(self, db: Session):
+        self.service = AuthService(db)
 
+    # Kept as a static/class-level dependency so FastAPI can resolve it
+    @staticmethod
+    def get_token(token: str = Depends(oauth2_scheme)) -> str:
+        return token
 
-@router.post("/register", response_model=schemas.UserOut)
-def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
-    existing = db.query(models.User).filter(models.User.email == user_in.email).first()
-    if existing:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+    def register(self, user_in: UserCreate) -> UserOut:
+        return self.service.register(user_in)
 
-    user = models.User(
-        email=user_in.email,
-        password_hash=hash_password(user_in.password),
-        monthly_income=user_in.monthly_income,
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
+    def login(self, email: str, password: str) -> Token:
+        return self.service.login(email, password)
 
-
-@router.post("/login", response_model=schemas.Token)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.email == form_data.username).first()
-    if not user or not verify_password(form_data.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-
-    token = create_access_token(user_id=user.id)
-    return schemas.Token(access_token=token)
-
-
-@router.get("/profile", response_model=schemas.UserOut)
-def profile(current_user: models.User = Depends(get_current_user)):
-    return current_user
+    def profile(self, token: str) -> UserOut:
+        return self.service.get_current_user(token)
 
