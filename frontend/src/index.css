@@ -858,7 +858,12 @@
   color: oklch(0.7107 0.0351 256.7878);
   font-weight: 500;
 }
-.auth-panel-feature svg { color: oklch(0.6959 0.1491 162.4796); }
+.auth-panel-feature svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  color: oklch(0.6959 0.1491 162.4796);
+}
 
 /* ── Right form side ── */
 .auth-form-side {
