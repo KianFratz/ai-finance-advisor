@@ -15,6 +15,16 @@ export default function Login() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+
+    if (!email) {
+      setError("Email address is required.");
+      return;
+    }
+    if (!password) {
+      setError("Password is required.");
+      return;
+    }
+
     setLoading(true);
     try {
       await signIn(email, password);
@@ -24,7 +34,9 @@ export default function Login() {
         ? err.code === "ERR_NETWORK" || err.message === "Network Error"
           ? "Cannot reach the server. Make sure the backend is running and try again."
           : err.response?.data?.detail
-            ? String(err.response.data.detail)
+            ? Array.isArray(err.response.data.detail)
+              ? err.response.data.detail.map((d: any) => `${d.loc?.[1] || d.loc?.[0] || 'Field'}: ${d.msg}`).join(", ")
+              : String(err.response.data.detail)
             : err.message
         : err instanceof Error
           ? err.message
