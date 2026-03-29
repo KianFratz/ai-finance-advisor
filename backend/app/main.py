@@ -47,4 +47,4 @@ def unhandled_exception_handler(request, exc: Exception):
 def health():
     return {"status": "ok"}
 
-app.include_router(auth_router.router)
+app.include_router(auth_router.router, prefix="/api/auth")
