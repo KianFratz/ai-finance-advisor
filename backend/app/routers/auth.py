@@ -6,12 +6,12 @@ from ..schemas.auth_schema import UserCreate, UserOut, Token
 from ..controllers.auth_controller import AuthController
 from ..core.database import get_db
 
-
+router = APIRouter()
 
 @router.post("/register", response_model=UserOut, status_code=201)
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
     return AuthController(db).register(user_in)
-   
+
 
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):

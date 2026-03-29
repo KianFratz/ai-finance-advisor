@@ -13,7 +13,7 @@ const api = axios.create({
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const isAuthEndpoint =
     typeof config.url === "string" &&
-    (config.url.includes("/auth/register") || config.url.includes("/auth/login"));
+    (config.url.includes("/api/auth/register") || config.url.includes("/api/auth/login"));
   if (!isAuthEndpoint) {
     const token = localStorage.getItem("access_token");
     if (token && config.headers) {
@@ -24,7 +24,7 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 });
 
 export async function register(params: RegisterParams): Promise<User> {
-  const { data } = await api.post<User>("/auth/register", {
+  const { data } = await api.post<User>("/api/auth/register", {
     ...params,
     monthly_income: params.monthly_income != null ? Number(params.monthly_income) : null,
   });
@@ -35,14 +35,14 @@ export async function login(email: string, password: string): Promise<LoginRespo
   const params = new URLSearchParams();
   params.append("username", email);
   params.append("password", password);
-  const { data } = await api.post<LoginResponse>("/auth/login", params, {
+  const { data } = await api.post<LoginResponse>("/api/auth/login", params, {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
   return data;
 }
 
 export async function getProfile(): Promise<User> {
-  const { data } = await api.get<User>("/auth/profile");
+  const { data } = await api.get<User>("/api/auth/profile");
   return data;
 }
 

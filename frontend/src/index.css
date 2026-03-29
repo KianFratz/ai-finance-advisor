@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -46,7 +46,7 @@
   --sidebar-accent-foreground: oklch(0.6959 0.1491 162.4796);
   --sidebar-border: oklch(0.9288 0.0126 255.5078);
   --sidebar-ring: oklch(0.6959 0.1491 162.4796);
-  --font-sans: 'Poppins', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Inter', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: JetBrains Mono, monospace;
   --radius: 0.75rem;
@@ -101,7 +101,7 @@
   --sidebar-accent-foreground: oklch(0.6959 0.1491 162.4796);
   --sidebar-border: oklch(0.2795 0.0368 260.0310);
   --sidebar-ring: oklch(0.6959 0.1491 162.4796);
-  --font-sans: 'Poppins', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Inter', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: JetBrains Mono, monospace;
   --radius: 0.75rem;
@@ -396,16 +396,16 @@
 .lp-btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.625rem;
-  border-radius: 0.625rem;
+  gap: 0.25rem; /* smaller spacing between icon/text */
+  padding: 0.4rem 1rem; /* reduced padding */
+  border-radius: 0.5rem; /* slightly smaller radius */
   background: linear-gradient(135deg, oklch(0.6959 0.1491 162.4796), oklch(0.65 0.16 175));
   color: #fff;
-  font-size: 0.9375rem;
-  font-weight: 700;
+  font-size: 0.8rem; /* smaller text */
+  font-weight: 600; /* optional: slightly lighter */
   text-decoration: none;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 0 24px oklch(0.6959 0.1491 162.4796 / 0.45);
+  box-shadow: 0 0 12px oklch(0.6959 0.1491 162.4796 / 0.35); /* smaller glow */
 }
 .lp-btn-primary:hover {
   transform: translateY(-2px);
@@ -858,7 +858,12 @@
   color: oklch(0.7107 0.0351 256.7878);
   font-weight: 500;
 }
-.auth-panel-feature svg { color: oklch(0.6959 0.1491 162.4796); }
+.auth-panel-feature svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  color: oklch(0.6959 0.1491 162.4796);
+}
 
 /* ── Right form side ── */
 .auth-form-side {
@@ -908,6 +913,13 @@
   color: oklch(0.75 0.15 25);
   font-size: 0.875rem;
   line-height: 1.5;
+}
+
+.auth-error svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
 }
 
 .auth-field {
